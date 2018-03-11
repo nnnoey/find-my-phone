@@ -36,6 +36,42 @@ class UsersData{
         return phoneNumber
     }
 
+    fun saveContactInfo(){
+        var listOfTrackers=""
+        for ((key,value) in tracker){
+
+            if (listOfTrackers.length ==0 ){
+                listOfTrackers = key + "%" + value
+            }else{
+                listOfTrackers += "%"+ key + "%" + value
+            }
+        }
+
+        if (listOfTrackers.length ==0 ){
+            listOfTrackers ="empty"
+        }
+
+
+        val editor = sharePref!!.edit()
+        editor.putString("listOfTrackers",listOfTrackers)
+        editor.commit()
+    }
+
+    fun loadContactInfo(){
+        tracker.clear()
+        val listOfTrackers = sharePref!!.getString("listOfTrackers","empty")
+
+        if (!listOfTrackers.equals("empty")){
+            val usersInfo=listOfTrackers.split("%").toTypedArray()
+            var i=0
+            while(i<usersInfo.size){
+
+                tracker.put(usersInfo[i],usersInfo[i+1])
+                i += 2
+            }
+        }
+    }
+
     companion object {
         var tracker: MutableMap<String, String> = HashMap()
 

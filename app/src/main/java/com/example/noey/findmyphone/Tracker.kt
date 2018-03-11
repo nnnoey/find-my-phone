@@ -28,11 +28,14 @@ class Tracker : AppCompatActivity(){
 
     var listOfContact = ArrayList<UsersContact>()
     var adapter:ContactAdapter? = null
+    var usersData:UsersData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tracker)
 
+
+        usersData = UsersData(applicationContext)
 //        dummyData()
         adapter = ContactAdapter(listOfContact, this)
         listView_contactList.adapter = adapter
@@ -41,8 +44,11 @@ class Tracker : AppCompatActivity(){
             val userInfo = listOfContact[position]
             UsersData.tracker.remove(userInfo.phoneNumber)
             refreshData()
+
+            usersData!!.saveContactInfo()
         }
 
+        usersData!!.loadContactInfo()
         refreshData()
     }
 
@@ -137,8 +143,9 @@ class Tracker : AppCompatActivity(){
 
                             refreshData()
 
-//                            listOfContact.add(UsersContact(name, phoneNumber))
-//                            adapter!!.notifyDataSetChanged()
+                            val usersData = UsersData(this)
+                            usersData.saveContactInfo()
+
 
                         }
                     }
