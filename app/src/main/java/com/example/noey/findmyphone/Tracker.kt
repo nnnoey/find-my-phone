@@ -1,9 +1,12 @@
 package com.example.noey.findmyphone
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.*
@@ -19,6 +22,7 @@ import kotlin.system.measureNanoTime
 class Tracker : AppCompatActivity(){
 
     val REQUEST_CODE_CONTACT = 111;
+    val REQUEST_CODE_PICK_CONTACT = 222;
 
     var listOfContact = ArrayList<UsersContact>()
     var adapter:ContactAdapter? = null
@@ -27,7 +31,7 @@ class Tracker : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tracker)
 
-        dummyData()
+//        dummyData()
         adapter = ContactAdapter(listOfContact, this)
         listView_contactList.adapter = adapter
     }
@@ -94,7 +98,44 @@ class Tracker : AppCompatActivity(){
     }
 
     private fun pickContact() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
+        startActivityForResult(intent, REQUEST_CODE_PICK_CONTACT)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when(requestCode){
+            REQUEST_CODE_PICK_CONTACT ->{
+                if(resultCode == Activity.RESULT_OK){
+                    val contactData = data!!.data
+                    val content = contentResolver.query(contactData, null, null, null, null)
+
+                    if(content.moveToFirst()){
+                        val id = content.getString(content.getColumnIndexOrThrow(ContactsContract.Contacts._ID))
+                        val hasPhoneNumner = content.getString(content.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER))
+
+                        if (hasPhoneNumner.equals("1")){
+                            val phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" +id,
+                                    null,
+                                    null)
+
+                            phones.moveToFirst()
+                            val phoneNumber = phones.getString(phones.getColumnIndex("data1"))
+                            val name = phones.getString(content.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                            listOfContact.add(UsersContact(name, phoneNumber))
+                            adapter!!.notifyDataSetChanged()
+
+                        }
+                    }
+                }
+            }
+
+            else ->{
+                super.onActivityResult(requestCode, resultCode, data)
+
+            }
+        }
     }
 
     class ContactAdapter:BaseAdapter {
