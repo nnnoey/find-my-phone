@@ -1,10 +1,14 @@
 package com.example.noey.findmyphone
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.*
 import android.widget.BaseAdapter
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_tracker.*
 import kotlinx.android.synthetic.main.contact_ticket.view.*
 import kotlin.system.measureNanoTime
@@ -13,6 +17,8 @@ import kotlin.system.measureNanoTime
  * Created by noey on 11/3/2018 AD.
  */
 class Tracker : AppCompatActivity(){
+
+    val REQUEST_CODE_CONTACT = 111;
 
     var listOfContact = ArrayList<UsersContact>()
     var adapter:ContactAdapter? = null
@@ -45,7 +51,7 @@ class Tracker : AppCompatActivity(){
             }
 
             R.id.addContact ->{
-
+                checkPermission()
             }
 
             else ->{
@@ -54,6 +60,41 @@ class Tracker : AppCompatActivity(){
             }
         }
         return true
+    }
+
+    fun checkPermission(){
+        if (Build.VERSION.SDK_INT >= 23){
+            if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
+                    != PackageManager.PERMISSION_GRANTED){
+
+                requestPermissions(arrayOf(android.Manifest.permission.READ_CONTACTS), REQUEST_CODE_CONTACT)
+                return
+            }
+
+        }
+
+        pickContact()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode){
+            REQUEST_CODE_CONTACT ->{
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    pickContact()
+                } else{
+                    Toast.makeText(this, "Cannot access to contact ", Toast.LENGTH_LONG)
+                            .show()
+                }
+            }
+
+            else ->{
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            }
+        }
+    }
+
+    private fun pickContact() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     class ContactAdapter:BaseAdapter {
