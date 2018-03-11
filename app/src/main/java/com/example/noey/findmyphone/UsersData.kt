@@ -74,6 +74,14 @@ class UsersData{
 
     companion object {
         var tracker: MutableMap<String, String> = HashMap()
+        fun formatPhoneNumber(phoneNumber:String):String {
+            var onlyNumber= phoneNumber.replace("[^0-9]".toRegex(),"")
+            if (phoneNumber[0] == '+') {
+                onlyNumber ="+"+ phoneNumber
+            }
+
+            return  onlyNumber
+        }
 
     }
 }

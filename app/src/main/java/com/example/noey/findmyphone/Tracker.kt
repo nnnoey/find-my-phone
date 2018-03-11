@@ -137,8 +137,10 @@ class Tracker : AppCompatActivity(){
                                     null)
 
                             phones.moveToFirst()
-                            val phoneNumber = phones.getString(phones.getColumnIndex("data1"))
-                            val name = content.getString(content.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                            var phoneNumber = phones.getString(phones.getColumnIndex("data1"))
+                            var name = content.getString(content.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+
+                            phoneNumber = UsersData.formatPhoneNumber(phoneNumber)
                             UsersData.tracker.put(phoneNumber, name)
 
                             refreshData()
