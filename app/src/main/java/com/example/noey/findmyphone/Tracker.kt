@@ -10,6 +10,8 @@ import android.provider.ContactsContract
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.*
+import android.widget.Adapter
+import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_tracker.*
@@ -34,6 +36,14 @@ class Tracker : AppCompatActivity(){
 //        dummyData()
         adapter = ContactAdapter(listOfContact, this)
         listView_contactList.adapter = adapter
+        listView_contactList.onItemClickListener = AdapterView.OnItemClickListener{
+            parent, view, position, id ->
+            val userInfo = listOfContact[position]
+            UsersData.tracker.remove(userInfo.phoneNumber)
+            refreshData()
+        }
+
+        refreshData()
     }
 
     fun dummyData(){
@@ -122,9 +132,13 @@ class Tracker : AppCompatActivity(){
 
                             phones.moveToFirst()
                             val phoneNumber = phones.getString(phones.getColumnIndex("data1"))
-                            val name = phones.getString(content.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                            listOfContact.add(UsersContact(name, phoneNumber))
-                            adapter!!.notifyDataSetChanged()
+                            val name = content.getString(content.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                            UsersData.tracker.put(phoneNumber, name)
+
+                            refreshData()
+
+//                            listOfContact.add(UsersContact(name, phoneNumber))
+//                            adapter!!.notifyDataSetChanged()
 
                         }
                     }
@@ -136,6 +150,16 @@ class Tracker : AppCompatActivity(){
 
             }
         }
+    }
+
+    private fun refreshData() {
+        listOfContact.clear()
+
+        for ((key, value) in UsersData.tracker){
+            listOfContact.add(UsersContact(value, key))
+        }
+        adapter!!.notifyDataSetChanged()
+
     }
 
     class ContactAdapter:BaseAdapter {

@@ -35,4 +35,9 @@ class UsersData{
 
         return phoneNumber
     }
+
+    companion object {
+        var tracker: MutableMap<String, String> = HashMap()
+
+    }
 }
