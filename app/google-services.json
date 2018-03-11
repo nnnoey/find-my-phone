@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "373708034546",
+    "firebase_url": "https://findmyphone-cef47.firebaseio.com",
+    "project_id": "findmyphone-cef47",
+    "storage_bucket": "findmyphone-cef47.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373708034546:android:2b1862406573f33d",
+        "android_client_info": {
+          "package_name": "com.example.noey.findmyphone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "373708034546-hqu37eqr4ht92s6ah9mnv9j27ok43ibi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.noey.findmyphone",
+            "certificate_hash": "fb6480fd3ab4d1b7f725492d14a2c568e9d4261a"
+          }
+        },
+        {
+          "client_id": "373708034546-ec9ftt7uva852tt1r66gopd8amcgd74j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQIbzXKUPGKdeWbIdDOUdIcqn8aDWOON4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "373708034546-ec9ftt7uva852tt1r66gopd8amcgd74j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

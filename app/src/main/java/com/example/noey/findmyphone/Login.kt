@@ -3,6 +3,8 @@ package com.example.noey.findmyphone
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 
 /**
@@ -10,11 +12,16 @@ import kotlinx.android.synthetic.main.activity_login.*
  */
 class Login: AppCompatActivity(){
 
+    var firebaseAuth: FirebaseAuth? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         initView()
+
+        firebaseAuth = FirebaseAuth.getInstance()
+        signinAnonymous()
     }
 
     private fun initView() {
@@ -24,6 +31,23 @@ class Login: AppCompatActivity(){
 
             finish()
         }
+    }
+
+    fun signinAnonymous(){
+        firebaseAuth!!.signInAnonymously()
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Toast.makeText(applicationContext, "Authentication success.",
+                                Toast.LENGTH_SHORT).show()
+                        val user = firebaseAuth!!.getCurrentUser()
+
+                    } else {
+                        Toast.makeText(applicationContext, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show()
+
+                    }
+                }
     }
 
 }
